@@ -14,19 +14,18 @@ from utils import sleep_random, load_proxy, get_enumproxy
 from recaptcha_task import RecaptchaTask
 from image_handler import ImageHandler, image_types_conversions
 from fake_useragent import UserAgent
-
 class RecaptchaSolver:
-    def __init__(self, solve_url, use_proxies = False, headless = True):
+    def __init__(self, solve_url, use_proxies = True, headless = True, proxies=None):
         options = Options()
         options.headless = headless
-
+        self.proxies = proxies
+        # self.port = None
         profile = webdriver.FirefoxProfile() 
         if use_proxies:
-            # proxy = load_proxy()
-            proxy, port = get_enumproxy()
+            proxy = self.proxies
             profile.set_preference("network.proxy.type", 1)
-            profile.set_preference("network.proxy.http", proxy)
-            profile.set_preference("network.proxy.http_port", port)
+            profile.set_preference("network.proxy.http", proxy['host'])
+            profile.set_preference("network.proxy.http_port", proxy['port'])
             if "username" in proxy:
                 credentials = b64encode(f'{proxy["username"]}:{proxy["password"]}'.encode("ascii")).decode()
                 profile.set_preference("extensions.closeproxyauth.authtoken", credentials)
@@ -118,7 +117,6 @@ class RecaptchaSolver:
             except NoSuchElementException:
                 captcha_type = self.driver.find_element_by_class_name("rc-imageselect-desc").get_attribute("textContent")
                 class_name = "rc-imageselect-desc"
-
             if "Select all squares with" in captcha_type:
                 logger.debug("Fetching new challenge...")
                 if cnt > 30:
