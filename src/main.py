@@ -53,5 +53,5 @@ async def run_task(info: info):
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     
-    uvicorn.run(app="main:app", port=8800, host='0.0.0.0', workers=1, limit_max_requests=2000, timeout_graceful_shutdown=300)
+    uvicorn.run(app="main:app", port=8800, host='0.0.0.0', workers=1, limit_max_requests=2000, timeout_graceful_shutdown=500)
     # subprocess.run(command)
