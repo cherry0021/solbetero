@@ -1,1 +1,1 @@
-gunicorn main:app -w 12 -b 0.0.0.0:8800 --max-requests 2000  --timeout 300 --worker-class uvicorn.workers.UvicornWorker 
+/usr/local/bin/gunicorn main:app -w 12 -b 0.0.0.0:8800 -t 500 --worker-class uvicorn.workers.UvicornWorker 

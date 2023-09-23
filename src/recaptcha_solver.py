@@ -14,17 +14,19 @@ from utils import sleep_random, load_proxy, get_enumproxy
 from recaptcha_task import RecaptchaTask
 from image_handler import ImageHandler, image_types_conversions
 from fake_useragent import UserAgent
+from selenium_stealth import stealth
+
 class RecaptchaSolver:
-    def __init__(self, solve_url, use_proxies = True, headless = True, proxies=None):
+    def __init__(self, solve_url, use_proxies = True, headless = True):
         options = Options()
         options.headless = headless
-        self.proxies = proxies
+        #self.proxies = proxies
         # self.port = None
         profile = webdriver.FirefoxProfile() 
         if use_proxies:
-            proxy = self.proxies
+            proxy = load_proxy()
             profile.set_preference("network.proxy.type", 1)
-            profile.set_preference("network.proxy.http", proxy['host'])
+            profile.set_preference("network.proxy.http", proxy['ip'])
             profile.set_preference("network.proxy.http_port", proxy['port'])
             if "username" in proxy:
                 credentials = b64encode(f'{proxy["username"]}:{proxy["password"]}'.encode("ascii")).decode()
@@ -38,6 +40,15 @@ class RecaptchaSolver:
         
         try:
             self.driver = webdriver.Firefox(firefox_profile = profile, options = options)
+            #stealth(self.driver,
+               # languages=["en-US", "en"],
+               # vendor="Google Inc.",
+               # platform="Win32",
+               # webgl_vendor="Intel Inc.",
+               # renderer="Intel Iris OpenGL Engine",
+               # fix_hairline=True,
+            #)
+            #self.driver = webdriver.Firefox(firefox_profile = profile, options = options)
         except WebDriverException:
             options.headless = True
             self.driver = webdriver.Firefox(firefox_profile = profile, options = options)

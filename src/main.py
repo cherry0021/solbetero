@@ -28,9 +28,9 @@ celery_app = Celery(
 
 
 def captcha_solver(pageurl):
-    host, port = get_enumproxy()
-    proxies = {'host':host, 'port': port}
-    rcs = RecaptchaSolver(pageurl, use_proxies=True, proxies=proxies)
+    #host, port = get_enumproxy()
+    #proxies = {'host':host, 'port': port}
+    rcs = RecaptchaSolver(pageurl, use_proxies=True)
     # time.sleep(1.5)
     return  rcs.solve()
         # return recaptcha_token
@@ -53,5 +53,5 @@ async def run_task(info: info):
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     
-    uvicorn.run(app="main:app", port=8800, host='0.0.0.0', workers=1, limit_max_requests=2000, timeout_graceful_shutdown=500)
+    uvicorn.run(app="main:app")
     # subprocess.run(command)

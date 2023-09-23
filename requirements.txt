@@ -10,3 +10,5 @@ fastapi
 celery
 fake_useragent
 nopecha
+gunicorn
+selenium_stealth 
